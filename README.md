@@ -68,6 +68,6 @@ Like so:
 ```
 
 ## TODO
-* Add support for all parameters supported by puppeteer: https://github.com/puppeteer/puppeteer/blob/v2.1.1/docs/api.md#pagepdfoptions
+* [Add support for all parameters supported by Page.pdf()](https://github.com/Rozchmurzeni/pdf-printer/issues/1)
 * Add support for larger files
 * Add support for multi file documents
