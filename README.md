@@ -3,7 +3,7 @@ This repository contains a definiton of a stack with API Gateway that uses lamba
 It utilizes [chrome-aws-lambda](https://github.com/alixaxel/chrome-aws-lambda) to 
 
 ## Limitations
-Due to the API Gateway and AWS Lambda limitation the file both html and pdf have to be under 6 megabytes.
+Due to the [API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html) and [AWS Lambda limitation](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html) html sent to the API has to be under 6 megabytes.
 
 ## Get started
 You will need npm.
