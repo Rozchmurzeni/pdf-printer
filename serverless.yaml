@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  ServiceName:
+    Default: pdf-printer
+    Type: String
+    AllowedValues:
+      - pdf-printer
+
+Resources:
+  RestApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: PDF Printer Api
+      FailOnWarnings: true
+      Body:
+        swagger: 2.0
+        info:
+          version: 1.0.0
+          title: PDF Printer Api
+        basePath: /
+        paths:
+          /print:
+            post:
+              description: Accepts html and returns it as a pdf
+              produces:
+                - application/pdf;base64
+              consumes:
+                - application/json
+              x-amazon-apigateway-integration:
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PrinterLambda.Arn}/invocations"
+                responses:
+                  default:
+                    statusCode: 500
+                httpMethod: POST
+                type: aws_proxy
+                passthroughBehavior: when_no_match
+      Tags:
+        - Key: service-name
+          Value: !Ref ServiceName
+
+  ApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId: !Ref RestApi
+      StageName: v1
+
+  PrinterLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:invokeFunction
+      FunctionName: !GetAtt PrinterLambda.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"
+
+  PrinterLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: pdfprinter.handler
+      Runtime: nodejs12.x
+      Role: !GetAtt LambdaRole.Arn
+      MemorySize: 2048
+      Timeout: 60
+      Tags:
+        service-name: !Ref ServiceName
+        method-name: PrinterLambda
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
