@@ -31,7 +31,7 @@ Those two commands will package and deploy this application.
     "document": "base64_encoded_html"
 }
 ```
-With this payload you have to issue POST under `/print` endpoint in your aws gateway.
+With this payload you have to issue POST under `/print` endpoint in your aws gateway. Response will be a base64 encoded PDF.
 
 #### Format
 
