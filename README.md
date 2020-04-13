@@ -1,6 +1,7 @@
 # PDF Printer
 This repository contains a definiton of a stack with API Gateway that uses lamba and headless chrome to convert your html to pdf.
-It utilizes [chrome-aws-lambda](https://github.com/alixaxel/chrome-aws-lambda) to 
+It utilizes [chrome-aws-lambda](https://github.com/alixaxel/chrome-aws-lambda) to obtain a headless chrome.
+Underneath it loads the website that is sent to chrome and prints it, returning you a base64 encoded pdf.
 
 ## Limitations
 Due to the [API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html) and [AWS Lambda limitation](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html) html sent to the API has to be under 6 megabytes.
@@ -9,32 +10,28 @@ Due to the [API Gateway](https://docs.aws.amazon.com/apigateway/latest/developer
 You will need npm.
 
 ```
-    npm install chrome-aws-lambda --save-prod
-    npm install puppeteer-core --save-prod
-```
-This will install binary for the latest stable release of puppeteer and appropriate version of puppeteer-core.
-
-```
     npm install
 ```
-To install dependencies
+To install dependencies and code away! 
 
-### Deployment
+## Deployment
 
 ```
-    aws cloudformation package --template-file serverless.yaml --output-template-file serverless-out.yaml --s3-bucket <YOUR_DEPLOYMENT_BUCKET_NAME> --s3-prefix pdf-deployment-package 
-    aws cloudformation deploy --template-file serverless-out.yaml --stack-name <STACK_NAME> --capabilities CAPABILITY_IAM
+    npm run package -- --s3-bucket <YOUR_DEPLOYMENT_BUCKET_NAME> 
+    npm run deploy -- --stack-name <STACK_NAME>
 ```
-Those two commands will package and deploy this application. Remember to change values for deployment bucket name and stack name.
+Those two commands will package and deploy this application. 
 
+## Usage
 
-## Request format
+### Request
 ```
 {
     "format": "A4",
     "document": "base64_encoded_html"
 }
 ```
+With this payload you have to issue POST under `/print` endpoint in your aws gateway.
 
 #### Format
 

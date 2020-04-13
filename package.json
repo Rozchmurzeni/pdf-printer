@@ -1,0 +1,39 @@
+{
+  "name": "serverless-pdf-printer",
+  "version": "1.0.0",
+  "description": "PDF Printer, Serverless edition",
+  "main": "src/pdfprinter.js",
+  "dependencies": {
+    "chrome-aws-lambda": "^2.1.1",
+    "puppeteer-core": "^2.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0"
+  },
+  "scripts": {
+    "package": "aws cloudformation package --template-file serverless.yaml --output-template-file serverless-out.yaml --s3-prefix pdf-deployment-package ",
+    "deploy": " aws cloudformation deploy --template-file serverless-out.yaml --capabilities CAPABILITY_IAM",
+    "lint": "eslint src/* --ext .js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rozchmurzeni/pdf-printer.git"
+  },
+  "keywords": [
+    "pdf",
+    "serverless",
+    "printer",
+    "pdf",
+    "printer",
+    "aws",
+    "cloudformation",
+    "js"
+  ],
+  "author": "Rozchmurzeni.pl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Rozchmurzeni/pdf-printer/issues"
+  },
+  "homepage": "https://github.com/Rozchmurzeni/pdf-printer#readme"
+}

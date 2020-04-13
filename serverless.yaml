@@ -1,5 +1,4 @@
 AWSTemplateFormatVersion: 2010-09-09
-Transform: AWS::Serverless-2016-10-31
 
 Parameters:
   ServiceName:
@@ -55,16 +54,18 @@ Resources:
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"
 
   PrinterLambda:
-    Type: AWS::Serverless::Function
+    Type: AWS::Lambda::Function
     Properties:
-      Handler: pdfprinter.handler
+      Handler: src/pdfprinter.handler
       Runtime: nodejs12.x
       Role: !GetAtt LambdaRole.Arn
       MemorySize: 2048
       Timeout: 60
       Tags:
-        service-name: !Ref ServiceName
-        method-name: PrinterLambda
+        - Key: service-name
+          Value: !Ref ServiceName
+        - Key: method-name
+          Value: PrinterLambda
 
   LambdaRole:
     Type: AWS::IAM::Role
